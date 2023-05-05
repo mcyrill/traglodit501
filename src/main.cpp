@@ -3,21 +3,18 @@
 
 using namespace std;
 
-void run() {
-    cout << 5;
-}
 
 int main(int argc, char *argv[]) {
+    std::string filename;
+
     auto rootCmd = Command("root", argc, argv);
 
-    std::string var;
-    auto decode = Command("decode");
-    decode.stringVar("file", "f", &var);
+    auto decode = Command("decode", [&filename]() {cout << filename;});
+    decode.stringVar("file", "f", &filename);
     rootCmd.registerCommand(&decode);
 
-    std::string p;
-    auto encode = Command("encode", [&p]() {cout << p;});
-    decode.registerCommand(&encode);
+    auto encode = Command("encode", [&filename]() {cout << filename;});
+    rootCmd.registerCommand(&encode);
 
     rootCmd.execute();
 

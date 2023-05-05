@@ -38,7 +38,7 @@ public:
     }
 
     void execute() {
-        int shift = 0;
+        int shift = 1;
         if (this->withStringFlag) {
             if (this->argc < 3 ||
                 ("--" + std::get<0>(this->stringFlag) != argv[1] &&
@@ -48,7 +48,7 @@ public:
             *std::get<2>(this->stringFlag) = std::string(argv[2]);
             shift += 2;
         }
-        if (argc - shift == 1) {
+        if (argc - shift == 0) {
             if (this->run == nullptr) {
                 throw NotEnoughArguments();
             }
@@ -57,9 +57,9 @@ public:
         }
 
         for (auto cmd: this->subCmds) {
-            if (cmd->getUse() == argv[shift + 1]) {
-                cmd->argc = this->argc - 1 - shift;
-                cmd->argv = this->argv + 1 + shift;
+            if (cmd->getUse() == argv[shift]) {
+                cmd->argc = this->argc - shift;
+                cmd->argv = this->argv + shift;
                 cmd->execute();
                 return;
             }
