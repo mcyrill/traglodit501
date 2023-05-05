@@ -5,6 +5,7 @@
 #include <vector>
 #include <functional>
 #include <utility>
+
 #include "../exceptions/exceptions.h"
 
 class Command {
@@ -64,7 +65,7 @@ public:
                 return;
             }
         }
-        throw UnknownArgumentException(argv[0]);
+        throw UnknownArgumentException(argv[1]);
     }
 };
 
