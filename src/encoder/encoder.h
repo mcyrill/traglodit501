@@ -1,6 +1,6 @@
 #ifndef TRAGLODIT501_ENCODER_H
 #define TRAGLODIT501_ENCODER_H
 
-
+void encode();
 
 #endif //TRAGLODIT501_ENCODER_H

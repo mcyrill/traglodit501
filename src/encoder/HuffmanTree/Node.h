@@ -27,7 +27,7 @@ public:
 
 struct Comp {
     bool operator()(const Node* node1, const Node* node2){
-        return node1->getFrequency() < node2->getFrequency();
+        return node1->getFrequency() > node2->getFrequency();
     }
 };
 
