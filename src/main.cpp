@@ -1,20 +1,23 @@
 #include "iostream"
 
 #include "argparse/Command.h"
+#include "encoder/encoder.h"
 
 
 int main(int argc, char *argv[]) {
     std::string filename;
 
-    auto rootCmd = Command("root", argc, argv);
+    auto rootCmd = Command("", argc, argv);
 
-    auto decode = Command("decode", [&filename]() {std::cout << filename;});
-    decode.stringVar("file", "f", &filename);
-    rootCmd.registerCommand(&decode);
+    auto encodeCmd = Command("encode", [&filename]() {
+        encode(filename);
+    });
+    encodeCmd.stringVar("file", "f", &filename);
+    rootCmd.registerCommand(&encodeCmd);
 
-    auto encode = Command("encode", [&filename]() {std::cout << filename;});
-    encode.stringVar("file", "f", &filename);
-    rootCmd.registerCommand(&encode);
+    auto decodeCmd = Command("decodeCmd", [&filename]() {std::cout << filename;});
+    decodeCmd.stringVar("file", "f", &filename);
+    rootCmd.registerCommand(&decodeCmd);
 
     rootCmd.execute();
 

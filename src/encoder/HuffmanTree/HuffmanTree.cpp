@@ -52,6 +52,8 @@ std::map<char, Bitset> HuffmanTree::build(std::istream &is) {
         auto node2 = pq.top();
         pq.pop();
         auto newNode = new Node(' ', node1->getFrequency() + node2->getFrequency());
+        newNode->setLeft(node1);
+        newNode->setRight(node2);
         pq.push(newNode);
     }
     this->root = pq.top();

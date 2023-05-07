@@ -46,6 +46,17 @@ public:
     }
 };
 
+class FileNotFoundException : public std::exception {
+private:
+    std::string msg;
+public:
+    FileNotFoundException(const std::string &filename) : msg("File " + filename + " not found") {}
+
+    const char *what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
 
 
 #endif //TRAGLODIT501_EXCEPTIONS_H
