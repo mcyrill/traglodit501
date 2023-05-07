@@ -11,8 +11,15 @@
 class HuffmanTree {
 private:
     Node *root;
+
+    static std::map<char, int> getFrequencyTable(std::istream &is);
+
+    void destroyTree(Node *node);
+
 public:
-    HuffmanTree(Node *root) : root(root) {};
+    HuffmanTree();
+
+    ~HuffmanTree();
 
     std::map<char, Bitset> build(std::istream &is);
 };
