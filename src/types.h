@@ -4,5 +4,6 @@
 #include <vector>
 
 using Bitset = std::vector<bool>;
+using byte = char;
 
 #endif //TRAGLODIT501_TYPES_H
