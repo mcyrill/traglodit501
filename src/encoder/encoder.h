@@ -11,23 +11,14 @@
 #include "HuffmanTree/HuffmanTree.h"
 #include "../types.h"
 
+const std::size_t CHUNK_SIZE = 512;
+
 
 void writeCompressedFile(
         const std::string& filename,
-        const std::ifstream& is,
-        const std::map<char, Bitset>& encodingTable);
+        std::map<char, Bitset>& encodingTable);
 
 
-void encode(const std::string& filename) {
-    std::ifstream fis;
-    fis.open(filename);
-    if (!fis) {
-        throw FileNotFoundException(filename);
-    }
-    auto tree = HuffmanTree();
-    std::map<char, Bitset> encodingTable = tree.build(fis);
-
-    writeCompressedFile(filename, fis, encodingTable);
-}
+void encode(const std::string& filename);
 
 #endif //TRAGLODIT501_ENCODER_H
