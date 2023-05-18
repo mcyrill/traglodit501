@@ -8,13 +8,11 @@
 #include <map>
 
 #include "../exceptions/exceptions.h"
-#include "HuffmanTree/HuffmanTree.h"
+#include "../huffman_tree/HuffmanTree.h"
 #include "../types.h"
 
-const std::size_t CHUNK_SIZE = 512;
 
-
-void writeCompressedFile(
+void writeEncodedFile(
         const std::string& filename,
         std::map<char, Bitset>& encodingTable);
 

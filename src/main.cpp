@@ -2,6 +2,7 @@
 
 #include "argparse/Command.h"
 #include "encoder/encoder.h"
+#include "decoder/decoder.h"
 
 
 int main(int argc, char *argv[]) {
@@ -15,7 +16,9 @@ int main(int argc, char *argv[]) {
     encodeCmd.stringVar("file", "f", &filename);
     rootCmd.registerCommand(&encodeCmd);
 
-    auto decodeCmd = Command("decodeCmd", [&filename]() {std::cout << filename;});
+    auto decodeCmd = Command("decode", [&filename]() {
+        decode(filename);
+    });
     decodeCmd.stringVar("file", "f", &filename);
     rootCmd.registerCommand(&decodeCmd);
 

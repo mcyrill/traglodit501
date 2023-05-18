@@ -57,6 +57,17 @@ public:
     }
 };
 
+class CouldNotDecodeException : public std::exception {
+private:
+    std::string msg;
+public:
+    CouldNotDecodeException(const std::string &filename) : msg("Could not decode " + filename) {}
+
+    const char *what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
 
 
 #endif //TRAGLODIT501_EXCEPTIONS_H

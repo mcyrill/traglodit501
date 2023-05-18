@@ -2,6 +2,7 @@
 #include <ostream>
 #include <istream>
 #include <fstream>
+#include "../constants.h"
 
 #include "encoder.h"
 #include "../types.h"
@@ -14,7 +15,7 @@ std::size_t countBytesCntForEncodingTable(const std::map<char, Bitset> &encoding
     return cnt;
 }
 
-void writeCompressedFile(
+void writeEncodedFile(
         const std::string &filename,
         std::map<char, Bitset> &encodingTable) {
 
@@ -24,6 +25,7 @@ void writeCompressedFile(
 
     std::size_t sizeOfMetadata = 2 + filename.size() + countBytesCntForEncodingTable(encodingTable);
     byte* metadata = new byte[sizeOfMetadata];
+    std::fill(metadata, metadata + sizeOfMetadata, 0);
     metadata[0] = (byte) filename.size();
     for (int i = 0; i < filename.size(); i++) {
         metadata[i + 1] = filename[i];
@@ -33,13 +35,15 @@ void writeCompressedFile(
     for (const auto& s : encodingTable) {
         metadata[currentInd] = s.first;
         currentInd++;
-        char bytesCnt = (char) ((s.second.size() + 7) / 8);
-        metadata[currentInd] = bytesCnt;
+        byte bitsCnt = (byte) s.second.size();
+        metadata[currentInd] = bitsCnt;
         currentInd++;
-        for (int i = 0; i < bytesCnt; i++) {
+        for (int i = 0; i < (bitsCnt + 7) / 8; i++) {
             byte currentByte = 0;
-            for (int j = i * 8; j < std::max(i * 8 + 8, (int) s.second.size()); j++) {
-                currentByte |= byte(1) << (j - i * 8);
+            for (int j = i * 8; j < std::min(i * 8 + 8, (int) s.second.size()); j++) {
+                if (s.second[j - i * 8]) {
+                    currentByte |= byte(1) << (j - i * 8);
+                }
             }
             metadata[currentInd] = currentByte;
             currentInd++;
@@ -50,23 +54,22 @@ void writeCompressedFile(
 
     byte* chunk = new byte[CHUNK_SIZE];
     std::fill(chunk, chunk + CHUNK_SIZE, 0);
-    std::size_t bitsCnt = 0;
+    short bitsCnt = 0;
 
     char c;
     while (is.get(c)) {
         std::vector<bool>& encodedSymbol = encodingTable[c];
         if (bitsCnt + encodedSymbol.size() > CHUNK_SIZE * 8) {
-            byte* bitsInChunkNotFilled = new byte[1];
-            bitsInChunkNotFilled[0] = (byte) (CHUNK_SIZE * 8 - bitsCnt);
-            os.write(bitsInChunkNotFilled, 8);
+            short bitsInChunkNotFilled = bitsCnt;
+            os.write(reinterpret_cast<const char*>(bitsInChunkNotFilled), sizeof(short));
             os.write(chunk, CHUNK_SIZE);
             std::fill(chunk, chunk + CHUNK_SIZE, 0);
             bitsCnt = 0;
         }
-        for (std::size_t i = 0; i < encodedSymbol.size(); i++) {
+        for (auto && i : encodedSymbol) {
             std::size_t byteNumber = bitsCnt / 8;
             std::size_t bitNumber = bitsCnt % 8;
-            if (encodedSymbol[i]) {
+            if (i) {
                 chunk[byteNumber] |= byte(1) << bitNumber;
             }
             bitsCnt++;
@@ -86,5 +89,5 @@ void encode(const std::string& filename) {
     auto tree = HuffmanTree();
     std::map<char, Bitset> encodingTable = tree.build(fis);
 
-    writeCompressedFile(filename, encodingTable);
+    writeEncodedFile(filename, encodingTable);
 }
