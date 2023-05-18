@@ -53,7 +53,7 @@ void writeCompressedFile(
     std::size_t bitsCnt = 0;
 
     char c;
-    while (is >> c) {
+    while (is.get(c)) {
         std::vector<bool>& encodedSymbol = encodingTable[c];
         if (bitsCnt + encodedSymbol.size() > CHUNK_SIZE * 8) {
             byte* bitsInChunkNotFilled = new byte[1];
