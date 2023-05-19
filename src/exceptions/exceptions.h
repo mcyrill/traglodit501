@@ -57,6 +57,17 @@ public:
     }
 };
 
+class CouldNotEncodeException : public std::exception {
+private:
+    std::string msg;
+public:
+    CouldNotEncodeException(const std::string &filename) : msg("Could not encode " + filename) {}
+
+    const char *what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
 class CouldNotDecodeException : public std::exception {
 private:
     std::string msg;

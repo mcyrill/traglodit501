@@ -50,6 +50,9 @@ void writeEncodedFile(
         }
     }
     os.write(metadata, sizeOfMetadata);
+    if (!os) {
+        throw CouldNotEncodeException(filename);
+    }
     delete[] metadata;
 
     byte chunk[CHUNK_SIZE];
@@ -61,7 +64,13 @@ void writeEncodedFile(
         std::vector<bool>& encodedSymbol = encodingTable[c];
         if (bitsCnt + encodedSymbol.size() > CHUNK_SIZE * 8) {
             os.write(reinterpret_cast<const char*>(&bitsCnt), sizeof(bitsCnt));
+            if (!os) {
+                throw CouldNotEncodeException(filename);
+            }
             os.write(chunk, CHUNK_SIZE);
+            if (!os) {
+                throw CouldNotEncodeException(filename);
+            }
             std::fill(chunk, chunk + CHUNK_SIZE, 0);
             bitsCnt = 0;
         }
@@ -75,7 +84,13 @@ void writeEncodedFile(
         }
     }
     os.write(reinterpret_cast<const char*>(&bitsCnt), sizeof(short));
+    if (!os) {
+        throw CouldNotEncodeException(filename);
+    }
     os.write(chunk, CHUNK_SIZE);
+    if (!os) {
+        throw CouldNotEncodeException(filename);
+    }
 }
 
 void encode(const std::string& filename) {
