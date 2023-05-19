@@ -1,4 +1,5 @@
 #include "decoder.h"
+#include "../constants.h"
 
 
 void decode(std::string& filename) {
@@ -19,7 +20,6 @@ void decode(std::string& filename) {
         }
         decodedFilename.push_back(c);
     }
-//    std::ofstream fos(decodedFilename);
 
     byte decodingTableSize;
     if (!(fis >> decodingTableSize)) {
@@ -27,22 +27,19 @@ void decode(std::string& filename) {
     }
     for (int i = 0; i < decodingTableSize; i++) {
         char symbol;
-        if (!(fis >> symbol)) {
+        if (!(fis.get(symbol))) {
             throw CouldNotDecodeException(filename);
         }
         byte bitsCnt;
-        if (!(fis >> bitsCnt)) {
+        if (!(fis.get(bitsCnt))) {
             throw CouldNotDecodeException(filename);
         }
         Bitset code;
-        std::size_t bitsRead = 0;
+        byte b[(bitsCnt + 7) / 8];
+        fis.read(b, (bitsCnt + 7) / 8 * sizeof(byte));
         for (int j = 0; j < (bitsCnt + 7) / 8; j++) {
-            byte b;
-            if (!(fis >> b)) {
-                throw CouldNotDecodeException(filename);
-            }
             for (int l = 0; l < std::min(8, bitsCnt - j * 8); l++) {
-                if (b & (1 << l)) {
+                if (b[j] & (1 << l)) {
                     code.push_back(true);
                 } else {
                     code.push_back(false);
@@ -50,5 +47,34 @@ void decode(std::string& filename) {
             }
         }
         decodingTable[code] = symbol;
+    }
+
+    std::ofstream fos(decodedFilename);
+    short bitsInChunk;
+    byte chunk[CHUNK_SIZE];
+    while (fis.peek() != std::ifstream::traits_type::eof()) {
+        fis.read(reinterpret_cast<char*>(&bitsInChunk), sizeof(short));
+        if (!fis) {
+            throw CouldNotDecodeException(filename);
+        }
+        fis.read(chunk, CHUNK_SIZE);
+        if (!fis) {
+            throw CouldNotDecodeException(filename);
+        }
+        Bitset encodedSymbol;
+        for (int i = 0; i < bitsInChunk; i++) {
+            if (chunk[i / 8] & (1 << i % 8)) {
+                encodedSymbol.push_back(true);
+            } else {
+                encodedSymbol.push_back(false);
+            }
+            if (decodingTable.count(encodedSymbol)) {
+                fos << decodingTable[encodedSymbol];
+                encodedSymbol.clear();
+            }
+        }
+        if (!encodedSymbol.empty()) {
+            throw CouldNotDecodeException(filename);
+        }
     }
 }

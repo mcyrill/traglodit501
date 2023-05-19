@@ -52,7 +52,7 @@ void writeEncodedFile(
     os.write(metadata, sizeOfMetadata);
     delete[] metadata;
 
-    byte* chunk = new byte[CHUNK_SIZE];
+    byte chunk[CHUNK_SIZE];
     std::fill(chunk, chunk + CHUNK_SIZE, 0);
     short bitsCnt = 0;
 
@@ -60,8 +60,7 @@ void writeEncodedFile(
     while (is.get(c)) {
         std::vector<bool>& encodedSymbol = encodingTable[c];
         if (bitsCnt + encodedSymbol.size() > CHUNK_SIZE * 8) {
-            short bitsInChunkNotFilled = bitsCnt;
-            os.write(reinterpret_cast<const char*>(bitsInChunkNotFilled), sizeof(short));
+            os.write(reinterpret_cast<const char*>(&bitsCnt), sizeof(bitsCnt));
             os.write(chunk, CHUNK_SIZE);
             std::fill(chunk, chunk + CHUNK_SIZE, 0);
             bitsCnt = 0;
@@ -75,9 +74,7 @@ void writeEncodedFile(
             bitsCnt++;
         }
     }
-    byte* bitsInChunkNotFilled = new byte[1];
-    bitsInChunkNotFilled[0] = (byte) (CHUNK_SIZE * 8 - bitsCnt);
-    os.write(bitsInChunkNotFilled, 8);
+    os.write(reinterpret_cast<const char*>(&bitsCnt), sizeof(short));
     os.write(chunk, CHUNK_SIZE);
 }
 

@@ -20,7 +20,7 @@ HuffmanTree::~HuffmanTree() {
 std::map<char, int> HuffmanTree::getFrequencyTable(std::istream &is) {
     std::map<char, int> freqTable;
     char c;
-    while (is >> c) {
+    while (is.get(c)) {
         freqTable[c]++;
     }
     return freqTable;
