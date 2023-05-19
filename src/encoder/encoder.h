@@ -8,7 +8,7 @@
 #include <map>
 
 #include "../exceptions/exceptions.h"
-#include "../huffman_tree/HuffmanTree.h"
+#include "huffman_tree/HuffmanTree.h"
 #include "../types.h"
 
 

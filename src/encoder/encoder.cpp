@@ -40,8 +40,8 @@ void writeEncodedFile(
         currentInd++;
         for (int i = 0; i < (bitsCnt + 7) / 8; i++) {
             byte currentByte = 0;
-            for (int j = i * 8; j < std::min(i * 8 + 8, (int) s.second.size()); j++) {
-                if (s.second[j - i * 8]) {
+            for (int j = i * 8; j < std::min(i * 8 + 8, (int) bitsCnt); j++) {
+                if (s.second[j]) {
                     currentByte |= byte(1) << (j - i * 8);
                 }
             }

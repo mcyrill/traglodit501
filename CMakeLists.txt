@@ -11,9 +11,9 @@ add_executable(
         src/decoder/decoder.cpp
         src/encoder/encoder.h
         src/argparse/Command.h
-        src/huffman_tree/Node.h
-        src/huffman_tree/HuffmanTree.h
-        src/huffman_tree/HuffmanTree.cpp
+        src/encoder/huffman_tree/Node.h
+        src/encoder/huffman_tree/HuffmanTree.h
+        src/encoder/huffman_tree/HuffmanTree.cpp
         src/types.h
         src/encoder/encoder.cpp
         src/constants.h

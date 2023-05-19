@@ -5,7 +5,7 @@
 #include <map>
 
 #include "Node.h"
-#include "../types.h"
+#include "../../types.h"
 
 
 class HuffmanTree {

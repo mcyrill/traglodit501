@@ -63,7 +63,7 @@ void decode(std::string& filename) {
         }
         Bitset encodedSymbol;
         for (int i = 0; i < bitsInChunk; i++) {
-            if (chunk[i / 8] & (1 << i % 8)) {
+            if (chunk[i / 8] >> (i % 8) & 1) {
                 encodedSymbol.push_back(true);
             } else {
                 encodedSymbol.push_back(false);
