@@ -27,6 +27,12 @@ public:
 
     Command(std::string use, std::function<void()> run) : use(use), run(run) {};
 
+    ~Command() {
+        for (auto cmd : this->subCmds) {
+            delete cmd;
+        }
+    }
+
     void registerCommand(Command* cmd) {
         this->subCmds.push_back(cmd);
     }
