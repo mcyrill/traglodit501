@@ -17,8 +17,8 @@ HuffmanTree::~HuffmanTree() {
     destroyTree(this->root);
 }
 
-std::map<char, int> HuffmanTree::getFrequencyTable(std::istream &is) {
-    std::map<char, int> freqTable;
+std::unordered_map<char, int> HuffmanTree::getFrequencyTable(std::istream &is) {
+    std::unordered_map<char, int> freqTable;
     char c;
     while (is.get(c)) {
         freqTable[c]++;
@@ -39,8 +39,8 @@ void HuffmanTree::fillEncodingTable(Node* node, Bitset bitset) {
     this->fillEncodingTable(node->getRight(), bitset);
 }
 
-std::map<char, Bitset> HuffmanTree::build(std::istream &is) {
-    std::map<char, int> freqTable = this->getFrequencyTable(is);
+std::unordered_map<char, Bitset> HuffmanTree::build(std::istream &is) {
+    std::unordered_map<char, int> freqTable = this->getFrequencyTable(is);
     std::priority_queue<Node*, std::vector<Node*>, Comp> pq;
     for (auto s : freqTable) {
         pq.push(new Node(s.first, s.second));

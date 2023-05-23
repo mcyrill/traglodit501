@@ -14,7 +14,7 @@
 
 void writeEncodedFile(
         const std::string& filename,
-        std::map<char, Bitset>& encodingTable);
+        std::unordered_map<char, Bitset>& encodingTable);
 
 
 void encode(const std::string& filename);

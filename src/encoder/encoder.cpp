@@ -7,7 +7,7 @@
 #include "encoder.h"
 #include "../types.h"
 
-std::size_t countBytesCntForEncodingTable(const std::map<char, Bitset> &encodingTable) {
+std::size_t countBytesCntForEncodingTable(const std::unordered_map<char, Bitset> &encodingTable) {
     std::size_t cnt = encodingTable.size() * 2;
     for (const auto& s : encodingTable) {
         cnt += (s.second.size() + 7) / 8;
@@ -17,7 +17,7 @@ std::size_t countBytesCntForEncodingTable(const std::map<char, Bitset> &encoding
 
 void writeEncodedFile(
         const std::string &filename,
-        std::map<char, Bitset> &encodingTable) {
+        std::unordered_map<char, Bitset> &encodingTable) {
 
     std::ifstream is(filename);
     std::string archiveName = filename + ".traglodit501";
@@ -99,7 +99,7 @@ void encode(const std::string& filename) {
         throw FileNotFoundException(filename);
     }
     auto tree = HuffmanTree();
-    std::map<char, Bitset> encodingTable = tree.build(fis);
+    std::unordered_map<char, Bitset> encodingTable = tree.build(fis);
 
     writeEncodedFile(filename, encodingTable);
 }

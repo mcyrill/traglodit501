@@ -7,7 +7,7 @@ void decode(std::string& filename) {
     if (!fis) {
         throw FileNotFoundException(filename);
     }
-    std::map<Bitset, char> decodingTable;
+    std::unordered_map<Bitset, char> decodingTable;
     std::string decodedFilename;
     byte filenameLength;
     if (!(fis >> filenameLength)) {
