@@ -8,21 +8,21 @@
 int main(int argc, char *argv[]) {
     std::string filename;
 
-    auto rootCmd = Command("", argc, argv);
+    auto rootCmd = new Command("", argc, argv);
 
-    auto encodeCmd = Command("encode", [&filename]() {
+    auto encodeCmd = new Command("encode", [&filename]() {
         encode(filename);
     });
-    encodeCmd.stringVar("file", "f", &filename);
-    rootCmd.registerCommand(&encodeCmd);
+    encodeCmd->stringVar("file", "f", &filename);
+    rootCmd->registerCommand(encodeCmd);
 
-    auto decodeCmd = Command("decode", [&filename]() {
+    auto decodeCmd = new Command("decode", [&filename]() {
         decode(filename);
     });
-    decodeCmd.stringVar("file", "f", &filename);
-    rootCmd.registerCommand(&decodeCmd);
+    decodeCmd->stringVar("file", "f", &filename);
+    rootCmd->registerCommand(decodeCmd);
 
-    rootCmd.execute();
+    rootCmd->execute();
 
     return 0;
 }
