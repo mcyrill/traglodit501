@@ -1,3 +1,5 @@
+#include <utility>
+
 #ifndef TRAGLODIT501_NODE_H
 #define TRAGLODIT501_NODE_H
 
@@ -6,8 +8,8 @@ class Node {
 private:
     char s;
     int frequency;
-    Node *left;
-    Node *right;
+    std::shared_ptr<Node> left;
+    std::shared_ptr<Node> right;
 public:
     Node(char s, int frequency) : s(s), frequency(frequency), left(nullptr), right(nullptr) {};
     ~Node() = default;
@@ -16,17 +18,17 @@ public:
 
     char getSymbol() const { return this->s; }
 
-    Node* getLeft() const { return this->left; }
-    Node* getRight() const { return this->right; }
+    std::shared_ptr<Node> getLeft() const { return this->left; }
+    std::shared_ptr<Node> getRight() const { return this->right; }
 
-    void setLeft(Node* node) { this->left = node; }
-    void setRight(Node* node) {this->right = node; }
+    void setLeft(std::shared_ptr<Node> node) { this->left = std::move(node); }
+    void setRight(std::shared_ptr<Node> node) {this->right = std::move(node); }
 
     int getFrequency() const { return this->frequency; }
 };
 
 struct Comp {
-    bool operator()(const Node* node1, const Node* node2){
+    bool operator()(const std::shared_ptr<Node>& node1, const std::shared_ptr<Node>& node2){
         return node1->getFrequency() > node2->getFrequency();
     }
 };

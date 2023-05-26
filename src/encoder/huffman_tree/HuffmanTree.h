@@ -10,19 +10,16 @@
 
 class HuffmanTree {
 private:
-    Node *root;
+    std::shared_ptr<Node> root;
     std::unordered_map<char, Bitset> encodingTable;
 
     static std::unordered_map<char, int> getFrequencyTable(std::istream &is);
 
-    void fillEncodingTable(Node* node, Bitset bitset);
+    void fillEncodingTable(std::shared_ptr<Node> node, Bitset bitset);
 
-    void destroyTree(Node *node);
 
 public:
-    HuffmanTree();
-
-    ~HuffmanTree();
+    HuffmanTree() {};
 
     std::unordered_map<char, Bitset> build(std::istream &is);
 };

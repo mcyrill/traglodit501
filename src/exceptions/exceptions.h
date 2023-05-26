@@ -35,6 +35,17 @@ public:
     }
 };
 
+class EmptyFileException : public std::exception {
+private:
+    std::string msg;
+public:
+    EmptyFileException(const std::string &filename) : msg("File is empty: " + filename) {}
+
+    const char *what() const noexcept override {
+        return msg.c_str();
+    }
+};
+
 class FlagRequiredException : public std::exception {
 private:
     std::string msg;

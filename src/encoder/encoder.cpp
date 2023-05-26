@@ -1,11 +1,8 @@
-#include <iostream>
 #include <ostream>
-#include <istream>
 #include <fstream>
 #include "../constants.h"
 
 #include "encoder.h"
-#include "../types.h"
 
 std::size_t countBytesCntForEncodingTable(const std::unordered_map<char, Bitset> &encodingTable) {
     std::size_t cnt = encodingTable.size() * 2;
@@ -100,6 +97,9 @@ void encode(const std::string& filename) {
     }
     auto tree = HuffmanTree();
     std::unordered_map<char, Bitset> encodingTable = tree.build(fis);
+    if (encodingTable.empty()) {
+        throw EmptyFileException(filename);
+    }
 
     writeEncodedFile(filename, encodingTable);
 }
