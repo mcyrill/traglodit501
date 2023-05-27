@@ -31,7 +31,7 @@ std::unordered_map<char, Bitset> HuffmanTree::build(std::istream &is) {
     for (auto s : freqTable) {
         pq.push(std::make_shared<Node>(s.first, s.second));
     }
-    if (pq.size() == 0) {
+    if (pq.empty()) {
         return this->encodingTable;
     }
 
