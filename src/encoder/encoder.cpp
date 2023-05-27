@@ -16,7 +16,7 @@ void writeEncodedFile(
         const std::string &filename,
         std::unordered_map<char, Bitset> &encodingTable) {
 
-    std::ifstream is(filename);
+    std::ifstream is(filename, std::ios::binary);
     std::string archiveName = filename + ".traglodit501";
     std::ofstream os(archiveName, std::ios::binary);
 
@@ -91,7 +91,7 @@ void writeEncodedFile(
 }
 
 void encode(const std::string& filename) {
-    std::ifstream fis(filename);
+    std::ifstream fis(filename, std::ios::binary);
     if (!fis) {
         throw FileNotFoundException(filename);
     }

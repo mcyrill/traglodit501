@@ -49,7 +49,7 @@ void decode(std::string& filename) {
         decodingTable[code] = symbol;
     }
 
-    std::ofstream fos(decodedFilename);
+    std::ofstream fos(decodedFilename, std::ios::binary);
     short bitsInChunk;
     byte chunk[CHUNK_SIZE];
     while (fis.peek() != std::ifstream::traits_type::eof()) {
