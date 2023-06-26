@@ -3,6 +3,9 @@
 
 #include <istream>
 #include <map>
+#include <unordered_map>
+#include <memory>
+
 
 #include "Node.h"
 #include "../../types.h"

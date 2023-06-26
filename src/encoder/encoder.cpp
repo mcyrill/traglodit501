@@ -47,10 +47,10 @@ void writeEncodedFile(
         }
     }
     os.write(metadata, sizeOfMetadata);
+    delete[] metadata;
     if (!os) {
         throw CouldNotEncodeException(filename);
     }
-    delete[] metadata;
 
     byte chunk[CHUNK_SIZE];
     std::fill(chunk, chunk + CHUNK_SIZE, 0);

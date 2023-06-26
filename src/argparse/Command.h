@@ -2,6 +2,7 @@
 #define TRAGLODIT501_COMMAND_H
 
 #include <string>
+#include <utility>
 #include <vector>
 #include <functional>
 #include <utility>
@@ -11,7 +12,7 @@
 class Command {
 private:
     std::string use;
-    std::vector<Command *> subCmds;
+    std::vector<Command> subCmds;
     std::function<void()> run = nullptr;
 
     int argc = 0;
@@ -21,19 +22,13 @@ private:
     std::tuple<std::string, std::string, std::string*> stringFlag;
 public:
 
-    Command(std::string use) : use(use) {};
+    Command(std::string use) : use(std::move(use)) {};
 
-    Command(std::string use, int argc, char *argv[]) : use(use), argc(argc), argv(argv) {};
+    Command(std::string use, int argc, char *argv[]) : use(std::move(use)), argc(argc), argv(argv) {};
 
-    Command(std::string use, std::function<void()> run) : use(use), run(run) {};
+    Command(std::string use, std::function<void()> run) : use(std::move(use)), run(std::move(run)) {};
 
-    ~Command() {
-        for (auto cmd : this->subCmds) {
-            delete cmd;
-        }
-    }
-
-    void registerCommand(Command* cmd) {
+    void registerCommand(Command& cmd) {
         this->subCmds.push_back(cmd);
     }
 
@@ -64,10 +59,10 @@ public:
         }
 
         for (auto cmd: this->subCmds) {
-            if (cmd->getUse() == argv[shift]) {
-                cmd->argc = this->argc - shift;
-                cmd->argv = this->argv + shift;
-                cmd->execute();
+            if (cmd.getUse() == argv[shift]) {
+                cmd.argc = this->argc - shift;
+                cmd.argv = this->argv + shift;
+                cmd.execute();
                 return;
             }
         }

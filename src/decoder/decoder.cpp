@@ -1,5 +1,6 @@
 #include "decoder.h"
 #include "../constants.h"
+#include <unordered_map>
 
 
 void decode(std::string& filename) {
